@@ -61,8 +61,8 @@
 
     <dependency>
       <groupId>com.amazonaws</groupId>
-      <artifactId>aws-java-sdk</artifactId>
-      <version>${aws-java-sdk.version}</version>
+      <artifactId>amazon-kinesis-producer</artifactId>
+      <version>${amazon-kinesis-producer.version}</version>
     </dependency>
 
     <dependency>
@@ -78,7 +78,7 @@
     <!-- JAVA -->
     <java.version>1.7</java.version>
     <java.source.encoding>${general.encoding}</java.source.encoding>
-    <aws-java-sdk.version>1.7.0</aws-java-sdk.version>
+    <amazon-kinesis-producer.version>0.12.3</amazon-kinesis-producer.version>
     <log4j.version>1.2.16</log4j.version>
     <maven-compiler-plugin.version>3.1</maven-compiler-plugin.version>
     <maven-shade-plugin.version>2.2</maven-shade-plugin.version>
