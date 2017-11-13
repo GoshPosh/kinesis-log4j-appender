@@ -11,9 +11,7 @@ The Log4J Appender for Amazon Kinesis enables customers to publish logs from the
 
 The Log4J Appender for Amazon Kinesis:
 * Buffers log messages in memory
-* Uses the Amazon Kinesis AsyncClient from the AWS SDK for Java
-* Uses a ThreadPoolExecutor backed by a LinkedBlockingQueue. In most cases, this results in the log message simply being added to the in-memory queue. However, if the queue is full, the logging call will block until there is room in the buffer (e.g. some log entries are successfully sent to Amazon Kinesis and removed from the queue).
-* Uses an exponential backoff strategy with a configurable number of maxRetries in case of failures.
+* Uses the Amazon Kinesis Producer library for Java
 
 If a message is not successfully sent to Amazon Kinesis even after the retry attempts, then it is sent to the fallback handler (and no longer sent to Amazon Kinesis).
 
@@ -26,9 +24,6 @@ Note that the current implementation doesn't insert records in the same order as
 | log4j.appender.[APPENDER_NAME].streamName| | Stream name to which data is to be published
 | log4j.appender.[APPENDER_NAME].encoding | UTF-8 | Encoding used to convert log message strings into bytes before sending
 | log4j.appender.[APPENDER_NAME].maxRetries | 3 | Maximum number of retries when calling Kinesis APIs to publish a log message.
-| log4j.appender.[APPENDER_NAME].threadCount | 20 | Number of parallel threads for publishing logs to configured Kinesis stream
-| log4j.appender.[APPENDER_NAME].bufferSize | 2000 | Maximum number of outstanding log messages to keep in memory
-| log4j.appender.[APPENDER_NAME].shutdownTimeout | 30 | Seconds to send buffered messages before application JVM quits normally
 | log4j.appender.[APPENDER_NAME].endpoint | kinesis.us-east-1.amazonaws.com | Amazon Kinesis endpoint to make requests to, if configured this overrides default endpoint for the configured region
 | log4j.appender.[APPENDER_NAME].region | us-east-1 | Amazon Kinesis endpoint in this configured region will be used for making requests unless overridden by log4j.appender.[APPENDER_NAME].endpoint
 
@@ -39,16 +34,6 @@ We recommend that customers:
 * Configure an additional appender (for example: DailyRollingFileAppender), so that they will retain logs even in the rare cases when the log entries may not be successfully sent to Amazon Kinesis.
 * Pick a shutdownTimeout that allows the appender to send all outstanding log entries to Amazon Kinesis before exiting.
 
-## Proxy Configuration
-
-For customers who connect to the Internet through a proxy server, the Log4J
-Appender for Amazon Kinesis will pick up the [Java proxy system
-properties](https://docs.oracle.com/javase/6/docs/technotes/guides/net/proxies.html)
-and update the underlying ClientConfiguration instance.
-
-Supported system properies are http.proxyHost, http.proxyPort, http.proxyUser,
-http.proxyPassword, and http.auth.ntlm.domain. For NTLM authentication on Windows, the
-COMPUTERNAME environment variable is used to set the proxy workstation.
 
 ## Building from source
 * Download and install [Apache Maven 3.x](http://maven.apache.org/download.cgi)
@@ -114,7 +99,7 @@ COMPUTERNAME environment variable is used to set the proxy workstation.
   ```
 
 ## Related Resources
-* [Amazon Kinesis Developer Guide](http://docs.aws.amazon.com/kinesis/latest/dev/introduction.html)  
+* [Amazon Kinesis Producer Library Guide](http://docs.aws.amazon.com/streams/latest/dev/developing-producers-with-kpl.html)  
 * [Amazon Kinesis API Reference](http://docs.aws.amazon.com/kinesis/latest/APIReference/Welcome.html)
 * [AWS SDK for Java](http://aws.amazon.com/sdkforjava)
 * [Apache Log4j 1.2.x](http://logging.apache.org/log4j/1.2/)
